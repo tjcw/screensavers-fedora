@@ -14,13 +14,16 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
+#export TARGET_DIR=/home/${SUDO_USER}/eclipse-workspace
+export TARGET_DIR=/home/tjcw/eclipse-workspace
+export EXTRA_LB_ARGS="--verbose --debug" 
 
 function build_one
 {
   (
    mkdir -p "${stamp}/$1" &&
    cd "${stamp}/$1" &&
-   /home/${SUDO_USER}/eclipse-workspace/screensavers/bin/do_oi_ws "$1" trixie 
+   ${TARGET_DIR}/screensavers-fedora/bin/do_oi_ws "$1" trixie 
    ln live-image-amd64.hybrid.iso "../../isos/$1.iso"
   )
 }
@@ -28,7 +31,8 @@ function build_one
 stamp="$(date +%Y%m%d-%H%M)"
 rm -f isos/freeduc-trixie.iso isos/gk-trixie.iso
 mkdir -p isos
-export LIVE_BUILD=/home/${SUDO_USER}/eclipse-workspace/live-build
-export PATH=/home/${SUDO_USER}/eclipse-workspace/live-build/frontend:$PATH
-build_one freeduc-trixie
-build_one gk-trixie
+export LIVE_BUILD=${TARGET_DIR}/live-build
+export PATH=${TARGET_DIR}/live-build/frontend:$PATH
+build_one basic-trixie
+#build_one freeduc-trixie
+#build_one gk-trixie

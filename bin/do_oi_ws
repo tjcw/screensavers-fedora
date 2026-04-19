@@ -15,29 +15,29 @@
 #   limitations under the License.
 #
 # Patch to display boot menu for 10 seconds before booting
-patch -p1 -N -d /home/${SUDO_USER}/eclipse-workspace/live-build/share/bootloaders/isolinux </home/${SUDO_USER}/eclipse-workspace/screensavers/patches/isolinux.cfg.patch
+patch -p1 -N -d ${TARGET_DIR}/live-build/share/bootloaders/isolinux <${TARGET_DIR}/screensavers-fedora/patches/isolinux.cfg.patch
 # Set up boot splash
-cp /home/${SUDO_USER}/eclipse-workspace/screensavers/svgs/facesplash.svg /home/${SUDO_USER}/eclipse-workspace/live-build/share/bootloaders/splash.svg
+cp ${TARGET_DIR}/screensavers-fedora/svgs/facesplash.svg ${TARGET_DIR}/live-build/share/bootloaders/splash.svg
 PATH=/sbin:$PATH
 export LB_APT_SECURE=false
-if [[ -d /home/${SUDO_USER}/eclipse-workspace/debootstrap ]]
-then
-  # Point at debootstrap
-  PATH=/home/${SUDO_USER}/eclipse-workspace/debootstrap:$PATH
-  export LB_ARCHITECTURE=amd64
-  export DEBOOTSTRAP_DIR=/home/${SUDO_USER}/eclipse-workspace/debootstrap
-fi
+# if [[ -d ${TARGET_DIR}/debootstrap ]]
+# then
+#   # Point at debootstrap
+#   PATH=${TARGET_DIR}/debootstrap:$PATH
+#   export LB_ARCHITECTURE=amd64
+#   export DEBOOTSTRAP_DIR=${TARGET_DIR}/debootstrap
+# fi
 export LB_BOOTAPPEND_LIVE="boot=live components splash noeject"
 lb clean
 lb config --distribution=$2 --chroot-filesystem=ext4
-awk '{ if ( substr($1,1,1) != "#" && substr($1,1,3) != "lib" ) print $1; }' <  /home/${SUDO_USER}/eclipse-workspace/screensavers/lb-package-lists/$1.list.chroot \
+awk '{ if ( substr($1,1,1) != "#" && substr($1,1,3) != "lib" ) print $1; }' <  ${TARGET_DIR}/screensavers-fedora/lb-package-lists/$1.list.chroot \
    > config/package-lists/desktop.list.chroot
 mkdir -p config/hooks
-cp -r /home/${SUDO_USER}/eclipse-workspace/screensavers/hooks/$1/. config/hooks/
+cp -r ${TARGET_DIR}/screensavers-fedora/hooks/$1/. config/hooks/
 mkdir -p config/content config/content-files
-cp -r /home/${SUDO_USER}/eclipse-workspace/screensavers/content/$1/. config/content/
-cp -r /home/${SUDO_USER}/eclipse-workspace/screensavers/content/common/. config/content/
-cp -r /home/${SUDO_USER}/eclipse-workspace/screensavers/content/common-files/. config/content-files/
+cp -r ${TARGET_DIR}/screensavers-fedora/content/$1/. config/content/
+cp -r ${TARGET_DIR}/screensavers-fedora/content/common/. config/content/
+cp -r ${TARGET_DIR}/screensavers-fedora/content/common-files/. config/content-files/
 lb build ${EXTRA_LB_ARGS}
 # if 'lb build' is reliable, no need to iterate on it
 #for i in $(seq 1 10)
