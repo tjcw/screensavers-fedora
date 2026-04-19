@@ -15,9 +15,11 @@
 #   limitations under the License.
 #
 # Patch to display boot menu for 10 seconds before booting
-patch -p1 -N -d ${TARGET_DIR}/live-build/share/bootloaders/isolinux <${TARGET_DIR}/screensavers-fedora/patches/isolinux.cfg.patch
+echo $PATH
+type patch
+patch -p1 -N -d ${TARGET_DIR}/live-build-fedora/share/bootloaders/isolinux <${TARGET_DIR}/screensavers-fedora/patches/isolinux.cfg.patch
 # Set up boot splash
-cp ${TARGET_DIR}/screensavers-fedora/svgs/facesplash.svg ${TARGET_DIR}/live-build/share/bootloaders/splash.svg
+cp ${TARGET_DIR}/screensavers-fedora/svgs/facesplash.svg ${TARGET_DIR}/live-build-fedora/share/bootloaders/splash.svg
 PATH=/sbin:$PATH
 export LB_APT_SECURE=false
 # if [[ -d ${TARGET_DIR}/debootstrap ]]
@@ -28,8 +30,8 @@ export LB_APT_SECURE=false
 #   export DEBOOTSTRAP_DIR=${TARGET_DIR}/debootstrap
 # fi
 export LB_BOOTAPPEND_LIVE="boot=live components splash noeject"
-lb clean
-lb config --distribution=$2 --chroot-filesystem=ext4
+lb clean ${EXTRA_LB_ARGS} 
+lb config ${EXTRA_LB_ARGS} --distribution=$2 --chroot-filesystem=ext4
 awk '{ if ( substr($1,1,1) != "#" && substr($1,1,3) != "lib" ) print $1; }' <  ${TARGET_DIR}/screensavers-fedora/lb-package-lists/$1.list.chroot \
    > config/package-lists/desktop.list.chroot
 mkdir -p config/hooks

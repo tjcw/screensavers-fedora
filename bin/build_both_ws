@@ -31,8 +31,8 @@ function build_one
 stamp="$(date +%Y%m%d-%H%M)"
 rm -f isos/freeduc-trixie.iso isos/gk-trixie.iso
 mkdir -p isos
-export LIVE_BUILD=${TARGET_DIR}/live-build
-export PATH=${TARGET_DIR}/live-build/frontend:$PATH
+export LIVE_BUILD=${TARGET_DIR}/live-build-fedora
+export PATH=${TARGET_DIR}/live-build-fedora/frontend:$PATH
 build_one basic-trixie
 #build_one freeduc-trixie
 #build_one gk-trixie
